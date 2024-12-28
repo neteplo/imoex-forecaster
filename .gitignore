@@ -1,0 +1,15 @@
+# Jupyter Notebook related files/dirs
+**/.ipynb_checkpoints/
+*.ipynb
+
+# System files
+.DS_Store
+.idea
+
+# pycache
+**/__pycache__
+
+# Virtual environment
+venv/
+.env/
+

@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "imoex-forecaster"
+version = "0.1.0"
+description = "HSE MLOps course project: Forecasting IMOEX using open data"
+authors = ["Maxim Grinin <mk.grinin@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.0.1"
+fire = "^0.7.0"
+setuptools = "^75.6.0"
+
+
+[tool.poetry.group.parsing.dependencies]
+requests = "^2.32.3"
+feedparser = "^6.0.11"
+bs4 = "^0.0.2"
+selenium = "^4.27.1"
+lxml = "^5.3.0"
+
+
+[tool.poetry.group.data.dependencies]
+pandas = "^2.2.3"
+
+
+[tool.poetry.group.language.dependencies]
+nltk = "^3.9.1"
+pymorphy2 = "^0.9.1"
+
+
+[tool.poetry.group.ml.dependencies]
+scikit-learn = "^1.6.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
