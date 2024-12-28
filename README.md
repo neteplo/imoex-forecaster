@@ -93,6 +93,7 @@
 ```
 
 ## Структура
+
 ```
 mlops_project/
 ├── Dockerfile
@@ -113,6 +114,5 @@ mlops_project/
 ├── infer.py
 ├── poetry.lock
 ├── pyproject.toml
-├── rss.ipynb
 └── train.py
 ```
