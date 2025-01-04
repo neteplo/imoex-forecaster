@@ -13,6 +13,7 @@ python = "^3.10"
 pre-commit = "^4.0.1"
 fire = "^0.7.0"
 setuptools = "^75.6.0"
+dvc = "^3.58.0"
 
 
 [tool.poetry.group.parsing.dependencies]
@@ -30,10 +31,12 @@ pandas = "^2.2.3"
 [tool.poetry.group.language.dependencies]
 nltk = "^3.9.1"
 pymorphy2 = "^0.9.1"
+transformers = "^4.47.1"
 
 
 [tool.poetry.group.ml.dependencies]
 scikit-learn = "^1.6.0"
+torch = "^2.5.1"
 
 [build-system]
 requires = ["poetry-core"]

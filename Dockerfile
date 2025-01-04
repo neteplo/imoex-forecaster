@@ -1,22 +1,22 @@
+# Оф. образ python 3.10
 FROM python:3.10-slim
 
+# Отключаем буферизацию и запись pycache для ускорения работы
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc libpq-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Устанавливаем рабочую директорию
+WORKDIR usr/src/app
 
-RUN pip install --no-cache-dir poetry
+# Устанавливаем Poetry
+RUN pip install --no-cache-dir poetry /app/
 
-WORKDIR /app
+# Копируем конфиги poetry
+COPY pyproject.toml poetry.lock
 
-COPY pyproject.toml poetry.lock /app/
+# Устанавливаем зависимости указанные в конфигах poetry
+RUN poetry install
 
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi
-
-COPY . /app/
-
-ENTRYPOINT ["python", "train.py"]
+# Задаем поведение контенера при запуске
+ENTRYPOINT ["python"]
+CMD ["train.py", "<args>"]

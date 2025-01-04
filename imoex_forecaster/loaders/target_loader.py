@@ -35,7 +35,7 @@ def fetch_imoex(from_dt: str, till_dt: str) -> NoReturn:
 
     df["dt"] = pd.to_datetime(df["begin"])
 
-    return df[['dt', 'close']].rename(columns={'close': 'imoex_close_val'})
+    return df[["dt", "close"]].rename(columns={"close": "imoex_close_val"})
 
 
 if __name__ == "__main__":

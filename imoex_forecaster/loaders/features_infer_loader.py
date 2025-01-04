@@ -47,8 +47,8 @@ def fetch_news(max_retries: int = 5, delay: int = 5) -> Dict[str, List]:
                 )
                 collector["title"].append(entry.title)
 
-                #clean_summary = parse_summary(entry.summary)
-                #collector["summary"].append(clean_summary)
+                # clean_summary = parse_summary(entry.summary)
+                # collector["summary"].append(clean_summary)
 
             return collector
         else:
