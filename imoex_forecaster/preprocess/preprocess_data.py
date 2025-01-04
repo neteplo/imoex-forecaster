@@ -1,11 +1,10 @@
-import numpy as np
 import re
-from sklearn.feature_extraction.text import TfidfVectorizer
-import pandas as pd
 
 import nltk
+import pandas as pd
 import pymorphy2
 from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 try:
     _ = stopwords.words("russian")
@@ -44,17 +43,17 @@ def clear_text(text: str) -> str:
     return " ".join(lemmatized_tokens)
 
 
-def vectorize_text(text_arr) -> pd.DataFrame:
-
+def vectorize_data(text_arr) -> pd.DataFrame:
     tfidf_vectorizer = TfidfVectorizer(max_features=1000)
 
     vectorized_text = tfidf_vectorizer.fit_transform(text_arr)
 
-    vectorized_df = pd.DataFrame(vectorized_text.toarray(), columns=tfidf_vectorizer.get_feature_names_out())
+    vectorized_df = pd.DataFrame(
+        vectorized_text.toarray(), columns=tfidf_vectorizer.get_feature_names_out()
+    )
 
     return vectorized_df
 
 
 def preprocess(data) -> pd.DataFrame:
-
-    data
+    pass

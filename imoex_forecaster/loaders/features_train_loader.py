@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 
-from utils.date_utils import parse_russian_datetime
+from imoex_forecaster.utils.date_utils import parse_russian_datetime
 
 
 def fetch_news_history(from_dt: str, till_dt: str):
@@ -62,23 +62,23 @@ def fetch_news_history(from_dt: str, till_dt: str):
         collector = defaultdict(list)
         for article in articles:
             title = article.find("span", {"class": "search-item__title"})
-            #summary = article.find("span", {"class": "search-item__text"})
+            # summary = article.find("span", {"class": "search-item__text"})
             category = article.find(
                 "span", {"class": "search-item__category"}
             ).get_text(strip=True)
 
             category_split = category.split(",")
-            #tags = category_split[:-2]
+            # tags = category_split[:-2]
             ts_str = "".join(category_split[-2:])
             ts = parse_russian_datetime(ts_str)
 
             collector["ts"].append(ts)
             collector["title"].append(title.get_text(strip=True))
-            #if summary:
+            # if summary:
             #    collector["summary"].append(summary.get_text(strip=True))
-            #else:
+            # else:
             #    collector["summary"].append(None)
-            #collector["tags"].append(tags)
+            # collector["tags"].append(tags)
 
     driver.quit()
 
