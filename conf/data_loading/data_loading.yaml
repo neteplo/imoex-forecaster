@@ -1,0 +1,9 @@
+s3_key_id: ${oc.env:KEY_ID}
+s3_secret_key: ${oc.env:SECRET_KEY}
+s3_endpoint_url: https://storage.yandexcloud.net
+s3_bucket: imoex-forecaster-data_loading
+
+rbc_base_url: https://www.rbc.ru/search/?query=&project=rbcnews&dateFrom={}&dateTo={}
+imoex_url: https://iss.moex.com/iss/engines/stock/markets/index/securities/IMOEX/candles.json
+
+local_data_dir: ./data

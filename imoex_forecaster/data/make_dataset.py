@@ -1,8 +1,8 @@
 import json
 import os
 from datetime import datetime, timedelta
+from typing import Set
 
-import fire
 import pandas as pd
 from tqdm import tqdm
 
@@ -12,7 +12,7 @@ from imoex_forecaster.data.scrap_target import scrap_imoex
 from imoex_forecaster.utils.s3_utils import S3Client
 
 
-def check_raw_data_local(data_dir: str, all_date_strs) -> list:
+def check_raw_data_local(data_dir: str, all_date_strs: Set) -> list:
     """
     Проверяет наличие сырых данных в локальном окружении за указанный период.
 
@@ -26,17 +26,18 @@ def check_raw_data_local(data_dir: str, all_date_strs) -> list:
     missing_dates = []
     for date_str in all_date_strs:
         news_path = os.path.join(
-            data_dir, f"raw-data/news-data-daily/rbc_{date_str}.json"
+            "data", f"raw-data/news-data-daily/rbc_{date_str}.json"
         )
         imoex_path = os.path.join(
-            data_dir, f"raw-data/imoex-data-daily/candles_{date_str}.json"
+            "data",
+            f"raw-data/imoex-data-daily/candles_{date_str}.json",
         )
         if not os.path.exists(news_path) or not os.path.exists(imoex_path):
             missing_dates.append(date_str)
     return missing_dates
 
 
-def download_data_local(s3_client, missing_dates):
+def download_data_local(s3_client, missing_dates) -> None:
     """
     Скачивает недостающие данные из S3 в локальное окружение.
 
@@ -87,7 +88,7 @@ def check_missing_data_s3(s3_client, missing_dates) -> set:
     return missing_s3_dates
 
 
-def scrape_missing_data(s3_client, missing_s3_dates):
+def scrape_missing_data(s3_client, missing_s3_dates) -> None:
     """
     Выполняет скраппинг и загрузку недостающих данных на S3.
 
@@ -100,12 +101,14 @@ def scrape_missing_data(s3_client, missing_s3_dates):
         for date_str in tqdm(missing_s3_dates, desc="Scrapping initiated:"):
             news_data = scrap_rbc_feed_daily(date_str)
             s3_client.upload_json(
-                news_data, f"raw-data/news-data-daily/rbc_{date_str}.json"
+                news_data,
+                f"raw-data/news-data-daily/rbc_{date_str}.json",
             )
 
             imoex_data = scrap_imoex(date_str, date_str)
             s3_client.upload_json(
-                imoex_data, f"raw-data/imoex-data-daily/candles_{date_str}.json"
+                imoex_data,
+                f"raw-data/imoex-data-daily/candles_{date_str}.json",
             )
     else:
         print("All dates are available on S3.")
@@ -123,14 +126,37 @@ def preprocess_data(data_dir: str) -> pd.DataFrame:
         pd.DataFrame: DataFrame с предобработанными и векторизованными данными и временными метками.
     """
     news_data = []
-    for file_name in os.listdir(os.path.join(data_dir, "raw-data/news-data-daily")):
-        file_path = os.path.join(data_dir, "raw-data/news-data-daily", file_name)
+    for file_name in os.listdir(os.path.join("data", "raw-data/news-data-daily")):
+        file_path = os.path.join("data", "raw-data/news-data-daily", file_name)
         df = pd.read_json(file_path, encoding="utf-8")
         news_data.append(df)
 
     concat_df = pd.concat(news_data, ignore_index=True)
     concat_df["ts"] = pd.to_datetime(concat_df["ts"])
-    dataset = clear_and_vectorize(concat_df)
+    features_df = clear_and_vectorize(concat_df)
+
+    target_data = []
+    for file_name in os.listdir(os.path.join(data_dir, "raw-data/imoex-data-daily")):
+        file_path = os.path.join(data_dir, "raw-data/imoex-data-daily", file_name)
+        with open(file_path, "r", encoding="utf-8") as f:
+            imoex_data = json.load(f)
+            # КОСТЫЛЬ ИЗ ЗА БАГА ДАННЫХ
+            try:
+                target_df = pd.DataFrame(imoex_data)
+            except ValueError:
+                target_df = pd.DataFrame(eval(imoex_data))
+            target_df["ts"] = pd.to_datetime(target_df["dt"])
+            target_df = target_df[["ts", "imoex_close_val"]].rename(
+                columns={"imoex_close_val": "target"}
+            )
+            target_data.append(target_df)
+
+    target_df = pd.concat(target_data, ignore_index=True).dropna()
+    target_df["dt"] = pd.to_datetime(target_df["ts"]).dt.date
+    # КОСТЫЛЬ ИЗ ЗА БАГА ДАННЫХ
+    target_df.drop("ts", axis=1, inplace=True)
+
+    dataset = pd.merge(features_df, target_df, on="dt", how="right").set_index("dt")
     return dataset
 
 
@@ -168,13 +194,5 @@ def make_dataset(
     print("Preprocessing data...")
     dataset = preprocess_data(data_dir)
     output_path = os.path.join(data_dir, "dataset.csv")
-    dataset.to_csv(output_path, index=False)
+    dataset.to_csv(output_path)
     print(f"Preprocessed data saved to {output_path}")
-
-
-if __name__ == "__main__":
-    fire.Fire(
-        lambda from_dt, till_dt: make_dataset(
-            from_dt, till_dt, os.environ["KEY_ID"], os.environ["SECRET_KEY"], "./data"
-        )
-    )

@@ -1,4 +1,4 @@
 defaults:
-  - data: data
+  - data_loading: data_loading
   - model: model
   - training: training

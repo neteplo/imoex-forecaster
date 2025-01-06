@@ -1,1 +1,2 @@
-model_local_path: ../../models
+input_dim: 1000
+output_dim: 1

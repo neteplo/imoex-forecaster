@@ -1,10 +1,10 @@
 import json
+from typing import Any, Dict
 
-import fire
 import requests
 
 
-def scrap_imoex(from_dt: str, till_dt: str) -> str:
+def scrap_imoex(data_conf: Dict[str, Any], from_dt, till_dt) -> str:
     """
     Получает данные индекса IMOEX с Московской биржи за указанный диапазон дат и сохраняет их в CSV-файл.
 
@@ -15,7 +15,7 @@ def scrap_imoex(from_dt: str, till_dt: str) -> str:
     Exception:
         HTTPError: Если HTTP-запрос к API MOEX завершился неудачно.
     """
-    url = "https://iss.moex.com/iss/engines/stock/markets/index/securities/IMOEX/candles.json"
+    url = data_conf["imoex_url"]
 
     params = {
         "interval": 24,
@@ -27,7 +27,7 @@ def scrap_imoex(from_dt: str, till_dt: str) -> str:
     response.raise_for_status()
 
     data = response.json()
-    data_rows = data["candles"]["data"]
+    data_rows = data["candles"]["data_loading"]
     columns = data["candles"]["columns"]
 
     # Find the indices for 'close' and 'begin'
@@ -35,7 +35,7 @@ def scrap_imoex(from_dt: str, till_dt: str) -> str:
     open_index = columns.index("open")
     dt_index = columns.index("begin")
 
-    # Transform data into the desired format
+    # Transform data_loading into the desired format
     collector = {"dt": [], "imoex_open_val": [], "imoex_close_val": []}
 
     for row in data_rows:
@@ -44,7 +44,3 @@ def scrap_imoex(from_dt: str, till_dt: str) -> str:
         collector["imoex_close_val"].append(row[close_index])
 
     return json.dumps(collector, ensure_ascii=False, separators=(",", ":"))
-
-
-if __name__ == "__main__":
-    fire.Fire(scrap_imoex)
