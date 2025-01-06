@@ -1,0 +1,6 @@
+[core]
+    remote = myremote
+['remote "myremote"']
+    url = s3://imoex-forecaster-data/raw-data
+    endpointurl = https://storage.yandexcloud.net
+    region = ru-central-1

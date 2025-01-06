@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-def parse_russian_datetime(date_str) -> datetime:
+def parse_rbc_datetime(rbc_date_str) -> str:
     """
     Разбирает строку даты на русском языке и возвращает объект datetime.
     Если год присутствует в строке, используется этот год.
@@ -19,6 +19,7 @@ def parse_russian_datetime(date_str) -> datetime:
         "мар": "03",
         "апр": "04",
         "май": "05",
+        "мая": "05",
         "июн": "06",
         "июл": "07",
         "авг": "08",
@@ -28,7 +29,7 @@ def parse_russian_datetime(date_str) -> datetime:
         "дек": "12",
     }
 
-    parts = date_str.split()
+    parts = rbc_date_str.split()
 
     if len(parts) == 4:
         day, month_name, year, time = parts
@@ -37,7 +38,6 @@ def parse_russian_datetime(date_str) -> datetime:
         year = datetime.now().year
 
     month = MONTH_MAPPINGS[month_name]
-    date_with_year = f"{year}-{month}-{day} {time}"
-    parsed_date = datetime.strptime(date_with_year, "%Y-%m-%d %H:%M")
+    timestamp = f"{year}-{month}-{day} {time}"
 
-    return parsed_date
+    return timestamp

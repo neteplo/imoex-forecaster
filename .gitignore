@@ -12,3 +12,6 @@
 # Virtual environment
 venv/
 .env/
+
+# Local data storage
+*.json
