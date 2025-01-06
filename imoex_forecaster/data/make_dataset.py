@@ -156,7 +156,12 @@ def preprocess_data(data_dir: str) -> pd.DataFrame:
     # КОСТЫЛЬ ИЗ ЗА БАГА ДАННЫХ
     target_df.drop("ts", axis=1, inplace=True)
 
-    dataset = pd.merge(features_df, target_df, on="dt", how="right").set_index("dt")
+    dataset = (
+        pd.merge(features_df, target_df, on="dt", how="right")
+        .set_index("dt")
+        .sort_index()
+    )
+    dataset["prev_imoex_close_val"] = dataset["target"].shift(1)
     return dataset
 
 

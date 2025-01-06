@@ -1,0 +1,13 @@
+data_loading:
+  s3_endpoint_url: https://storage.yandexcloud.net
+  s3_bucket: imoex-forecaster-data_loading
+  rbc_base_url: https://www.rbc.ru/search/?query=&project=rbcnews&dateFrom={}&dateTo={}
+  imoex_url: https://iss.moex.com/iss/engines/stock/markets/index/securities/IMOEX/candles.json
+  local_data_dir: ./data
+model:
+  input_dim: 1000
+  output_dim: 1
+training:
+  batch_size: 32
+  max_epochs: 10
+  learning_rate: 0.001
