@@ -1,11 +1,10 @@
-from typing import NoReturn
+import json
 
 import fire
-import pandas as pd
 import requests
 
 
-def fetch_imoex(from_dt: str, till_dt: str) -> NoReturn:
+def scrap_imoex(from_dt: str, till_dt: str) -> str:
     """
     Получает данные индекса IMOEX с Московской биржи за указанный диапазон дат и сохраняет их в CSV-файл.
 
@@ -28,15 +27,24 @@ def fetch_imoex(from_dt: str, till_dt: str) -> NoReturn:
     response.raise_for_status()
 
     data = response.json()
-    candles = data["candles"]["data"]
+    data_rows = data["candles"]["data"]
     columns = data["candles"]["columns"]
 
-    df = pd.DataFrame(candles, columns=columns)
+    # Find the indices for 'close' and 'begin'
+    close_index = columns.index("close")
+    open_index = columns.index("open")
+    dt_index = columns.index("begin")
 
-    df["dt"] = pd.to_datetime(df["begin"])
+    # Transform data into the desired format
+    collector = {"dt": [], "imoex_open_val": [], "imoex_close_val": []}
 
-    return df[["dt", "close"]].rename(columns={"close": "imoex_close_val"})
+    for row in data_rows:
+        collector["dt"].append(row[dt_index])
+        collector["imoex_open_val"].append(row[open_index])
+        collector["imoex_close_val"].append(row[close_index])
+
+    return json.dumps(collector, ensure_ascii=False, separators=(",", ":"))
 
 
 if __name__ == "__main__":
-    fire.Fire(fetch_imoex)
+    fire.Fire(scrap_imoex)
