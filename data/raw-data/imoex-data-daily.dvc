@@ -1,0 +1,6 @@
+outs:
+- md5: 31830ee32da1538cba3baf77ca3b6926.dir
+  size: 81387
+  nfiles: 1031
+  hash: md5
+  path: imoex-data-daily

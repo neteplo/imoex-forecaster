@@ -1,0 +1,6 @@
+outs:
+- md5: b28a7706cb2a8f5798741eaf34a4cf8e.dir
+  size: 15666201
+  nfiles: 1031
+  hash: md5
+  path: news-data-daily
