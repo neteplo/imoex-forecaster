@@ -5,6 +5,8 @@ import pandas as pd
 import pytorch_lightning as pl
 import torch
 from omegaconf import DictConfig
+from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.loggers import TensorBoardLogger
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
 
@@ -43,8 +45,15 @@ class SimpleNN(pl.LightningModule):
         x, y = batch
         y_hat = self(x)
         loss = self.loss_fn(y_hat, y)
-        self.log("train_loss", loss)
+        self.log("train_loss", loss, prog_bar=True)
         return loss
+
+    def validation_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self(x)
+        val_loss = self.loss_fn(y_hat, y)
+        self.log("val_loss", val_loss, prog_bar=True)
+        return val_loss
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.learning_rate)
@@ -62,9 +71,7 @@ def pull_data_with_dvc():
 
 
 @hydra.main(version_base=None, config_path="../../conf", config_name="config")
-def main(
-    config: DictConfig, from_dt: str = "2022-03-07", till_dt: str = "2022-03-07"
-):
+def main(config: DictConfig, from_dt: str = "2022-03-07", till_dt: str = "2022-03-07"):
     # Загрузка сырых данных из удаленного хранилища
     pull_data_with_dvc()
 
@@ -77,7 +84,9 @@ def main(
     )
 
     # Загрузка предобработанных данных
-    df = pd.read_csv(f"{config['data_loading']['local_data_dir']}/dataset.csv", index_col=["dt"])
+    df = pd.read_csv(
+        f"{config['data_loading']['local_data_dir']}/dataset.csv", index_col=["dt"]
+    )
     features = torch.tensor(df.drop(columns=["target"]).values, dtype=torch.float32)
     targets = torch.tensor(df["target"].values, dtype=torch.float32)
 
@@ -91,7 +100,17 @@ def main(
         output_dim=config["model"]["output_dim"],
         learning_rate=config["training"]["learning_rate"],
     )
-    trainer = pl.Trainer(max_epochs=config["training"]["max_epochs"])
+
+    logger = TensorBoardLogger("logs", name="simple_nn")
+    logger.log_hyperparams(config)
+
+    checkpoint_callback = ModelCheckpoint(monitor="val_loss")
+
+    trainer = pl.Trainer(
+        max_epochs=config["training"]["max_epochs"],
+        logger=logger,
+        callbacks=[checkpoint_callback],
+    )
     trainer.fit(model, dataloader)
 
 
