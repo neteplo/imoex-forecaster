@@ -9,7 +9,7 @@ class S3Client:
         self,
         key_id: str,
         secret_key: str,
-        bucket_name: str = "imoex-forecaster-data",
+        bucket_name: str = "imoex-forecaster-data_loading",
         region_name: str = "ru-central-1",
     ):
         """

@@ -2,7 +2,7 @@ import json
 import time
 from collections import defaultdict
 from datetime import datetime, timedelta
-from typing import Any, DefaultDict, List
+from typing import Any, DefaultDict, Dict, List
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -115,7 +115,7 @@ def parse_rbc_titles(html: str) -> DefaultDict[str, List[Any]]:
     return collector
 
 
-def scrap_rbc_feed_daily(date_str: str) -> str:
+def scrap_rbc_feed_daily(data_conf: Dict[str, Any], date_str: str) -> str:
     """
     Извлекает новости за конкретный день со страницы поиска РБК.
 
@@ -127,7 +127,7 @@ def scrap_rbc_feed_daily(date_str: str) -> str:
                                      и заголовков статей.
     """
     formatted_date = datetime.strptime(date_str, "%Y-%m-%d").strftime("%d.%m.%Y")
-    base_url = "https://www.rbc.ru/search/?query=&project=rbcnews&dateFrom={}&dateTo={}"
+    base_url = data_conf["rbc_base_url"]
     url = base_url.format(formatted_date, formatted_date)
 
     driver = init_driver()
@@ -171,7 +171,3 @@ def scrap_rbc_feed(from_dt: str, till_dt: str) -> str:
         current_date += timedelta(days=1)
 
     return json.dumps(all_results, ensure_ascii=False, separators=(",", ":"))
-
-
-if __name__ == "__main__":
-    scrap_rbc_feed()
