@@ -1,0 +1,11 @@
+rss:
+  - url: https://rssexport.rbc.ru/rbcnews/news/30/full.rss
+    source_tag: rbc
+  - url: https://www.finam.ru/analysis/conews/rsspoint
+    source_tag: finam
+  - url: https://smart-lab.ru/news/rss/
+    source_tag: smartlab
+  - url: https://www.kommersant.ru/RSS/news.xml
+    source_tag: kommersant
+  - url: https://www.vedomosti.ru/rss/news.xml
+    source_tag: vedomosti

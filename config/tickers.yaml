@@ -1,0 +1,136 @@
+# Топ-компоненты IMOEX (приближённый состав ~Q4 2024 / Q1 2025).
+#
+# weight    — доля в индексе (нормированная, сумма ~0.97; хвост ниже не включаем).
+# variants  — все строки, под которыми компания может встретиться в новостях.
+#             Сравниваются с очищенным (lowercase) текстом по границе слова.
+#             Тикеры (LKOH, SBER, …) тоже включаем как variants — встречаются
+#             в обзорах БКС / Финама / T-Invest.
+#
+# Веса приблизительные — официально публикуются здесь:
+#   https://www.moex.com/ru/index/IMOEX/constituents/
+
+tickers:
+  LKOH:
+    name: Лукойл
+    weight: 0.155
+    variants: [Лукойл, ЛУКОЙЛ, ЛУКойл, Lukoil, LUKOIL, LKOH]
+  SBER:
+    name: Сбербанк (об)
+    weight: 0.140
+    variants: [Сбербанк, Сбер, Sberbank, Sber, SBER]
+  GAZP:
+    name: Газпром
+    weight: 0.095
+    variants: [Газпром, Газпрома, Газпрому, Gazprom, GAZP]
+  NVTK:
+    name: НоваТЭК
+    weight: 0.060
+    variants: [НоваТЭК, Новатэк, Novatek, NVTK]
+  ROSN:
+    name: Роснефть
+    weight: 0.055
+    variants: [Роснефть, Роснефти, Rosneft, ROSN]
+  GMKN:
+    name: ГМК Норникель
+    weight: 0.050
+    variants: [Норникель, Норильский никель, GMK, Nornickel, GMKN]
+  TATN:
+    name: Татнефть (об)
+    weight: 0.045
+    variants: [Татнефть, Татнефти, Tatneft, TATN]
+  PLZL:
+    name: Полюс
+    weight: 0.030
+    variants: [Полюс, Polyus, PLZL]
+  MGNT:
+    name: Магнит
+    weight: 0.030
+    variants: [Магнит, Magnit, MGNT]
+  SBERP:
+    name: Сбербанк (преф)
+    weight: 0.025
+    variants: [Сбербанк-преф, SBERP]
+  YDEX:
+    name: Яндекс
+    weight: 0.025
+    variants: [Яндекс, Яндекса, Yandex, YDEX, YNDX]
+  CHMF:
+    name: Северсталь
+    weight: 0.025
+    variants: [Северсталь, Severstal, CHMF]
+  SNGSP:
+    name: Сургутнефтегаз (преф)
+    weight: 0.022
+    variants: [Сургутнефтегаз-преф, SNGSP]
+  SNGS:
+    name: Сургутнефтегаз (об)
+    weight: 0.020
+    variants: [Сургутнефтегаз, Surgutneftegas, SNGS]
+  TCSG:
+    name: ТКС Холдинг (Т-банк)
+    weight: 0.020
+    variants: [Тинькофф, ТКС, Т-банк, T-Bank, Tinkoff, TCS Group, TCSG]
+  NLMK:
+    name: НЛМК
+    weight: 0.018
+    variants: [НЛМК, NLMK]
+  MOEX:
+    name: Мосбиржа
+    weight: 0.018
+    variants: [Мосбиржа, Московская биржа, MOEX]
+  PHOR:
+    name: ФосАгро
+    weight: 0.015
+    variants: [ФосАгро, PhosAgro, PHOR]
+  ALRS:
+    name: Алроса
+    weight: 0.013
+    variants: [Алроса, ALROSA, ALRS]
+  RUAL:
+    name: РУСАЛ
+    weight: 0.013
+    variants: [РУСАЛ, Русал, Rusal, RUAL]
+  VTBR:
+    name: ВТБ
+    weight: 0.013
+    variants: [ВТБ, VTB, VTBR]
+  MTSS:
+    name: МТС
+    weight: 0.012
+    variants: [МТС, MTS, MTSS]
+  SIBN:
+    name: Газпром нефть
+    weight: 0.010
+    variants: [Газпром нефть, Газпромнефть, Gazprom Neft, SIBN]
+  MAGN:
+    name: ММК
+    weight: 0.010
+    variants: [ММК, Магнитогорский металлургический, MMK, MAGN]
+  IRAO:
+    name: Интер РАО
+    weight: 0.010
+    variants: [Интер РАО, ИнтерРАО, Inter RAO, IRAO]
+  AFKS:
+    name: АФК Система
+    weight: 0.008
+    variants: [АФК Система, Система, Sistema, AFKS]
+  PIKK:
+    name: ПИК СЗ
+    weight: 0.007
+    variants: [ПИК, PIK, PIKK]
+  HYDR:
+    name: РусГидро
+    weight: 0.007
+    variants: [РусГидро, RusHydro, HYDR]
+  RTKM:
+    name: Ростелеком
+    weight: 0.007
+    variants: [Ростелеком, Rostelecom, RTKM]
+  AFLT:
+    name: Аэрофлот
+    weight: 0.006
+    variants: [Аэрофлот, Aeroflot, AFLT]
+  TATNP:
+    name: Татнефть (преф)
+    weight: 0.005
+    variants: [Татнефть-преф, TATNP]
