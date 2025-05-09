@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "imoex-forecaster"
+version = "0.1.0"
+description = "Краткосрочное прогнозирование индекса IMOEX по новостному потоку и ценовым признакам."
+authors = ["m.grinin <mkgcolab@gmail.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.15"
+requests = "^2.31"
+datasets = "^4.8.5"
+telethon = "^1.43.2"
+pyyaml = "^6.0.3"
+ipykernel = "^7.2.0"
+beautifulsoup4 = "^4.14.3"
+lxml = "^6.1.0"
+gensim = "^4.4.0"
+scikit-learn = "^1.8.0"
+natasha = "^1.6.0"
+torch = "^2.11.0"
+fastapi = "^0.136.1"
+uvicorn = {extras = ["standard"], version = "^0.46.0"}
+python-telegram-bot = ">=21"
+httpx = "^0.28.1"
+feedparser = "^6.0.12"
+apscheduler = "^3.11.2"
+redis = "^7.4.0"
+sqlalchemy = ">=2.0"
+psycopg = {version = ">=3.1", extras = ["binary"]}
+pika = "^1.4.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+ruff = "^0.6"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
